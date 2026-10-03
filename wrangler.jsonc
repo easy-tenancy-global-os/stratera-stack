@@ -1,0 +1,106 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // ── Project identity ──────────────────────────────────────────────
+  // Cloudflare Pages project name (user-assigned · v4.8)
+  "name": "weathered-night-72f4",
+  "compatibility_date": "2026-04-22",
+
+  // ── Pages build output ────────────────────────────────────────────
+  // Vite outputs to dist/; wrangler picks up _worker.js + _routes.json
+  "pages_build_output_dir": "./dist",
+
+  // ── Compatibility flags ───────────────────────────────────────────
+  // nodejs_compat: enables Node.js APIs in Workers (fetch, crypto, etc.)
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+
+  // ── Workers AI binding ────────────────────────────────────────────
+  // CF Workers AI fallback when Novita FLUX.1 is unavailable
+  "ai": {
+    "binding": "AI"
+  },
+
+  // ── Observability (v4.4 additive — zero risk) ─────────────────────
+  // Enables CF Logs for the Pages Functions runtime; aggregated in CF dashboard.
+  // Default head_sampling_rate = 1.0 (100% of requests sampled).
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1
+    }
+  },
+
+  // ── Public vars (v5.3.1-alpha — MetaMCP hybrid gateway) ───────────
+  // Non-sensitive runtime configuration. Values here are safe to commit.
+  //
+  // METAMCP_GATEWAY_URL — Public HTTPS base URL of the remote MetaMCP gateway
+  //   (see ops/metamcp.service). Leave empty ("") to fall back to the local
+  //   in-repo /api/mcp dispatcher — zero-regression rollout. Override per
+  //   environment via `npx wrangler pages secret put METAMCP_GATEWAY_URL
+  //   --project-name weathered-night-72f4` or via the Pages dashboard.
+  //
+  // METAMCP_BEARER_TOKEN — Bearer token the gateway expects on Authorization.
+  //   NEVER commit this; set it exclusively as a Wrangler secret:
+  //     npx wrangler pages secret put METAMCP_BEARER_TOKEN --project-name weathered-night-72f4
+  //   The secret takes precedence over any [vars] entry at runtime.
+  "vars": {
+    "METAMCP_GATEWAY_URL": ""
+  },
+
+  // ── Cloudflare D1 (SQLite) ─────────────────────────────────────────
+  // Uncomment and add database_id after running:
+  //   npx wrangler d1 create easy-tenancy-production
+  //
+  // "d1_databases": [
+  //   {
+  //     "binding": "DB",
+  //     "database_name": "easy-tenancy-production",
+  //     "database_id": "<your-database-id-from-wrangler-d1-create>"
+  //   }
+  // ],
+
+  // ── Cloudflare KV (session / cache) ───────────────────────────────
+  // Uncomment after running:
+  //   npx wrangler kv:namespace create EASY_TENANCY_KV
+  //
+  // "kv_namespaces": [
+  //   {
+  //     "binding": "KV",
+  //     "id": "<kv-id>",
+  //     "preview_id": "<kv-preview-id>"
+  //   }
+  // ],
+
+  // ── Cloudflare R2 (asset storage) ─────────────────────────────────
+  // Uncomment after running:
+  //   npx wrangler r2 bucket create easy-tenancy-assets
+  //
+  // "r2_buckets": [
+  //   {
+  //     "binding": "R2",
+  //     "bucket_name": "easy-tenancy-assets"
+  //   }
+  // ]
+
+  // ── Analytics pipeline (R2 Parquet sink · v4.8.2) ─────────────────
+  // Run once to provision: `npm run analytics:provision`
+  // Token scopes needed: Workers R2 Storage:Edit + Workers Pipelines:Edit
+  //
+  // Architecture: Worker → Stream → Pipeline (SQL) → Sink → R2 Parquet
+  //   · Bucket:   easy-tenancy-analytics
+  //   · Stream:   easy-tenancy-events  (HTTP-enabled, auth required)
+  //   · Sink:     easy-tenancy-r2-sink (parquet · gzip · 10MB · 30s)
+  //   · Pipeline: easy-tenancy-analytics (INSERT INTO sink SELECT * FROM stream)
+  //
+  // Usage in Worker code:
+  //   env.ANALYTICS.send([{ event: 'page_view', ts: Date.now(), path: '/' }])
+  //
+  // "pipelines": [
+  //   {
+  //     "binding": "ANALYTICS",
+  //     "pipeline": "easy-tenancy-events"
+  //   }
+  // ]
+}

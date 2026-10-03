@@ -1,0 +1,69 @@
+[Unit]
+Description=Production Hardened MetaMCP Gateway
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=100
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=metamcp
+Group=metamcp
+WorkingDirectory=/opt/metamcp
+ExecStart=/usr/bin/node dist/index.js
+
+# Environment & Logging
+Environment=NODE_ENV=production
+StandardOutput=journal
+StandardError=journal
+
+# Dynamic Directory Management (Auto-creates /var/log/metamcp, /run/metamcp, /var/lib/metamcp)
+LogsDirectory=metamcp
+RuntimeDirectory=metamcp
+StateDirectory=metamcp
+UMask=0027
+
+# Restart & Exponential Backoff
+Restart=on-failure
+RestartSec=3s
+RestartSteps=5
+RestartMaxDelaySec=1m
+
+# Resource Caps
+MemoryMax=1G
+CPUQuota=150%
+
+# Filesystem & Privilege Isolation
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+PrivateUsers=true
+NoNewPrivileges=true
+CapabilityBoundingSet=
+
+# Kernel & Namespace Hardening
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectHostname=true
+ProtectClock=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictNamespaces=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+
+# Syscall Allowlisting
+SystemCallFilter=@system-service
+SystemCallFilter=~@debug @mount @cpu-emulation @obsolete @privileged @raw-io @reboot @swap
+SystemCallErrorNumber=EPERM
+SystemCallArchitectures=native
+
+# Network Egress Restrictions (Uncomment & adapt to restrict outbound traffic)
+# IPAddressDeny=any
+# IPAddressAllow=127.0.0.1 10.0.0.0/8
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STRATERA // Next-Gen Real Estate Operating Layer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#07090E',
+                        surface: '#0E131F',
+                        surfaceHover: '#141C2E',
+                        emeraldPulse: '#10B981',
+                        cyanGlow: '#06B6D4',
+                        violetCore: '#8B5CF6'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #07090E;
+            color: #F8FAFC;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(14, 19, 31, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-panel-active {
+            background: rgba(14, 19, 31, 0.9);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.15), inset 0 0 15px rgba(16, 185, 129, 0.05);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes dataFlow {
+            0% { stroke-dashoffset: 40; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        .data-stream-line {
+            stroke-dasharray: 10, 6;
+            animation: dataFlow 2s linear infinite;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07090E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black">
+
+    <header class="w-full border-b border-slate-800/80 bg-obsidian/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                <i data-lucide="layers" class="w-5 h-5 text-obsidian"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg tracking-wider text-white flex items-center space-x-2">
+                    <span>STRATERA</span>
+                    <span class="text-xs font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">v3.8 KERNEL</span>
+                </h1>
+                <p class="text-xs text-slate-400">Global Real Estate Operating Infrastructure</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <div class="hidden md:flex items-center space-x-6 text-xs font-mono text-slate-400">
+                <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>UK MTD / Reg: ACTIVE</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                    <span>US Escrow Sync: <strong class="text-white">99.98%</strong></span>
+                </div>
+            </div>
+            <button onclick="triggerExportModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition flex items-center space-x-2 shadow-sm">
+                <i data-lucide="share-2" class="w-4 h-4 text-emerald-400"></i>
+                <span>Export X Asset</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Column: The 7-Layer Deep Focus Graph Stack -->
+        <div class="lg:col-span-7 flex flex-col space-y-4">
+            <div class="flex items-center justify-between mb-1">
+                <div>
+                    <h2 class="text-xl font-bold text-white tracking-tight">Deep Focus Graph</h2>
+                    <p class="text-xs text-slate-400">Select any architectural layer below to inspect telemetry & sovereignty proofs.</p>
+                </div>
+                <button onclick="resetSelection()" class="text-xs font-mono text-emerald-400 hover:text-emerald-300 underline">Reset View</button>
+            </div>
+
+            <!-- Stack Container -->
+            <div id="layers-stack" class="relative flex flex-col space-y-3 p-2">
+                <!-- SVG Connector lines running behind the stack -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none -z-10" preserveAspectRatio="none">
+                    <line x1="50%" y1="0%" x2="50%" y2="100%" stroke="#1E293B" stroke-width="2" />
+                    <line x1="50%" y1="0%" x2="50%" y2="100%" stroke="#10B981" stroke-width="2" class="data-stream-line opacity-40" />
+                </svg>
+
+                <!-- Layers will be injected dynamically via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Right Column: Layer Deep Dive & Strategic Brain Roadmap -->
+        <div class="lg:col-span-5 sticky top-28 flex flex-col space-y-6">
+            
+            <!-- Active Layer Inspector Card -->
+            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden transition-all duration-300" id="inspector-card">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                
+                <div class="flex items-center justify-between mb-4">
+                    <span id="inspect-layer-badge" class="font-mono text-xs px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">LAYER [7]</span>
+                    <span id="inspect-category" class="text-xs font-mono text-slate-400 uppercase tracking-widest">Governance & Audit</span>
+                </div>
+
+                <h3 id="inspect-title" class="text-2xl font-bold text-white mb-1">STRATERA Trust</h3>
+                <p id="inspect-subtitle" class="text-sm font-medium text-emerald-400 mb-4">Trust as an engineered property</p>
+                
+                <p id="inspect-description" class="text-slate-300 text-sm leading-relaxed mb-6">
+                    Cryptographic proof generation, zero-knowledge compliance audits, and immutable provenance ledgers verifying cross-border transactions instantly between London and New York.
+                </p>
+
+                <!-- Sub-metrics Grid -->
+                <div class="grid grid-cols-2 gap-3 mb-6" id="inspect-metrics">
+                    <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                        <span class="text-[10px] font-mono text-slate-400 block uppercase">Audit Latency</span>
+                        <span class="text-sm font-bold font-mono text-white">0.42 ms</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                        <span class="text-[10px] font-mono text-slate-400 block uppercase">Proof Integrity</span>
+                        <span class="text-sm font-bold font-mono text-emerald-400">100% Valid</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                    <span class="text-slate-400">Cross-Border Kernel Status:</span>
+                    <span class="text-emerald-400 font-mono font-semibold flex items-center space-x-1">
+                        <i data-lucide="shield-check" class="w-4 h-4 inline"></i>
+                        <span>SECURED</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Strategic Brain Roadmap Card -->
+            <div class="glass-panel rounded-2xl p-6 border border-slate-800/80">
+                <div class="flex items-center space-x-2 mb-3">
+                    <i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i>
+                    <h4 class="font-bold text-white text-base">Strategic Brain Roadmap</h4>
+                </div>
+                <p class="text-xs text-slate-400 mb-4">
+                    Our sovereign architecture bridges fragmented UK legislative frameworks (Renters' Rights, Making Tax Digital) with US multi-state institutional compliance standards.
+                </p>
+                <div class="space-y-3">
+                    <div class="flex items-start space-x-3 text-xs">
+                        <div class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0 mt-0.5 font-mono">1</div>
+                        <div>
+                            <strong class="text-white block">Sovereign Identity Layer</strong>
+                            <span class="text-slate-400">Uniquely indexing every physical parcel, deed, and smart asset globally.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 text-xs">
+                        <div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 font-mono">2</div>
+                        <div>
+                            <strong class="text-white block">Capital & Compliance Integration</strong>
+                            <span class="text-slate-400">Automating escrow, risk valuation, and tax telemetry at protocol level.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="w-full border-t border-slate-800/80 py-6 px-6 text-center text-xs text-slate-500">
+        <p>STRATERA // The Global PropTech Operating Infrastructure for UK & US Markets. All rights reserved.</p>
+    </footer>
+
+    <!-- Export Modal for X Post Asset -->
+    <div id="export-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel rounded-2xl max-w-xl w-full p-6 relative border border-slate-700">
+            <button onclick="closeExportModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center space-x-2">
+                <i data-lucide="sparkles" class="text-emerald-400 w-5 h-5"></i>
+                <span>Generated X Post Asset</span>
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">Copy this optimized narrative draft and visual breakdown for your next X release.</p>
+            
+            <div class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-slate-300 leading-relaxed mb-4 max-h-60 overflow-y-auto border border-slate-800">
+Capital doesn't care about borders. Real estate operations shouldn't either.
+
+We built the unified real estate operating layer connecting the UK and US markets into a single high-integrity platform across 7 engineered layers—from Sovereign Asset Identity to Action & Verifiability Trust.
+
+[ 7 ] STRATERA Trust (Provenance & ZK Governance)
+[ 6 ] STRATERA Capital (Valuation & Risk)
+[ 5 ] STRATERA Infrastructure (Operable & Automated)
+[ 4 ] STRATERA Intelligence (Knowledge Graph & AI)
+[ 3 ] Infrastructure Data Layer (IoT & Documents)
+[ 2 ] Digital Twin Layer (Physical ↔ Digital)
+[ 1 ] Asset Identity Layer (Sovereign ID)
+
+The complete next-generation real estate operating layer of the global PropTech market. 🌐⚡
+            </div>
+
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeExportModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium">Close</button>
+                <button onclick="copyPostText()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs flex items-center space-x-2">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                    <span>Copy to Clipboard</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Layer Data definition based on the user's 7-layer spec
+        const layersData = [
+            {
+                id: 7,
+                name: "ACTION & VERIFIABILITY",
+                brand: "STRATERA Trust",
+                focus: "Provenance • Evidence • Governance • Audit",
+                smallText: "Trust as an engineered property",
+                category: "Governance & Audit",
+                description: "Cryptographic proof generation, zero-knowledge compliance audits, and immutable provenance ledgers verifying cross-border transactions instantly between London and New York.",
+                metrics: ["Audit Latency: 0.42ms", "Proof Integrity: 100%"]
+            },
+            {
+                id: 6,
+                name: "CAPITAL INTELLIGENCE",
+                brand: "STRATERA Capital",
+                focus: "Valuation • Risk • Financeable • Carbon/Energy",
+                smallText: "Programmatic liquidity and risk mitigation",
+                category: "Capital & Finance",
+                description: "Automated underwriting, dynamic carbon & energy scoring, and multi-currency escrow routing tailored for institutional capital layers.",
+                metrics: ["Escrow Speed: Instant", "Risk Model: AI-Driven"]
+            },
+            {
+                id: 5,
+                name: "OPERABILITY",
+                brand: "STRATERA Infrastructure / Estate / Energy",
+                focus: "Operable • Automated • Interoperable",
+                smallText: "Autonomous property and estate management",
+                category: "Operations & Estate",
+                description: "Self-healing smart building dispatch, automated tenant rights compliance for UK renters, and cross-state utility management for US portfolios.",
+                metrics: ["Dispatch SLA: <3m", "Automation: 94.2%"]
+            },
+            {
+                id: 4,
+                name: "INTELLIGENCE",
+                brand: "STRATERA Intelligence",
+                focus: "Knowledge Graph • AI Agents • Spatial Intelligence",
+                smallText: "Cognitive real estate reasoning engine",
+                category: "AI & Knowledge",
+                description: "Multimodal AI agents parsing zoning laws, lease agreements, and structural telemetry to generate instant strategic investment insights.",
+                metrics: ["Graph Nodes: 14.8M", "Agent Accuracy: 99.4%"]
+            },
+            {
+                id: 3,
+                name: "OBSERVABILITY",
+                brand: "Infrastructure Data Layer",
+                focus: "Sensors • IoT • Documents • Reality Capture",
+                smallText: "Complete physical-to-digital telemetry",
+                category: "Data & Telemetry",
+                description: "Real-time ingestion of IoT telemetry, legal documents, BIM models, and site reality scans into a single unified stream.",
+                metrics: ["Ingestion Rate: 45GB/s", "Sensor Uptime: 99.99%"]
+            },
+            {
+                id: 2,
+                name: "CONNECTIVITY",
+                brand: "Digital Twin Layer",
+                focus: "Physical World ↔ Digital Twin",
+                smallText: "Synchronized spatial representation",
+                category: "Spatial & Twin",
+                description: "Bi-directional synchronization mirroring physical real estate assets in high-fidelity digital twins with sub-millimeter spatial precision.",
+                metrics: ["Sync Latency: 12ms", "Spatial Precision: 99.9%"]
+            },
+            {
+                id: 1,
+                name: "IDENTITY - FOUNDATION",
+                brand: "Asset Identity Layer",
+                focus: "Every asset gets sovereign ID",
+                smallText: "The physical ground truth foundation",
+                category: "Ground Truth ID",
+                description: "The root protocol assigning an immutable, sovereign digital identity to every physical parcel, title, and structure globally.",
+                metrics: ["Indexed Assets: 1.2M+", "Collation: Global"]
+            }
+        ];
+
+        let activeLayerId = 7;
+
+        function renderStack() {
+            const container = document.getElementById('layers-stack');
+            container.innerHTML = '';
+
+            layersData.forEach((layer) => {
+                const isActive = layer.id === activeLayerId;
+                const panel = document.createElement('div');
+                panel.className = `glass-panel rounded-2xl p-4 sm:p-5 cursor-pointer transition-all duration-300 relative group ${
+                    isActive ? 'glass-panel-active scale-[1.01]' : 'hover:border-slate-600 hover:bg-slate-900/60'
+                }`;
+                
+                panel.onclick = () => selectLayer(layer.id);
+
+                panel.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-mono text-xs px-2.5 py-1 rounded-lg ${isActive ? 'bg-emerald-500 text-black font-bold' : 'bg-slate-800 text-slate-300'}">
+                                [${layer.id}]
+                            </span>
+                            <span class="text-xs font-mono text-slate-400 tracking-wider">${layer.name}</span>
+                        </div>
+                        <span class="text-xs font-mono ${isActive ? 'text-emerald-400' : 'text-slate-500 group-hover:text-slate-300'}">
+                            ${layer.smallText}
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">${layer.brand}</h4>
+                        <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">${layer.focus.split('•')[0].trim()}</span>
+                    </div>
+                `;
+
+                container.appendChild(panel);
+            });
+        }
+
+        function selectLayer(id) {
+            activeLayerId = id;
+            renderStack();
+            updateInspector();
+        }
+
+        function resetSelection() {
+            selectLayer(7);
+        }
+
+        function updateInspector() {
+            const layer = layersData.find(l => l.id === activeLayerId);
+            if (!layer) return;
+
+            document.getElementById('inspect-layer-badge').innerText = `LAYER [${layer.id}]`;
+            document.getElementById('inspect-category').innerText = layer.category;
+            document.getElementById('inspect-title').innerText = layer.brand;
+            document.getElementById('inspect-subtitle').innerText = layer.smallText;
+            document.getElementById('inspect-description').innerText = layer.description;
+
+            const metricsContainer = document.getElementById('inspect-metrics');
+            metricsContainer.innerHTML = `
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                    <span class="text-[10px] font-mono text-slate-400 block uppercase">${layer.metrics[0].split(':')[0]}</span>
+                    <span class="text-sm font-bold font-mono text-white">${layer.metrics[0].split(':')[1]}</span>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                    <span class="text-[10px] font-mono text-slate-400 block uppercase">${layer.metrics[1].split(':')[0]}</span>
+                    <span class="text-sm font-bold font-mono text-emerald-400">${layer.metrics[1].split(':')[1]}</span>
+                </div>
+            `;
+        }
+
+        function triggerExportModal() {
+            document.getElementById('export-modal').classList.remove('hidden');
+        }
+
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.add('hidden');
+        }
+
+        function copyPostText() {
+            const text = `Capital doesn't care about borders. Real estate operations shouldn't either.
+
+We built the unified real estate operating layer connecting the UK and US markets into a single high-integrity platform across 7 engineered layers—from Sovereign Asset Identity to Action & Verifiability Trust.
+
+[ 7 ] STRATERA Trust (Provenance & ZK Governance)
+[ 6 ] STRATERA Capital (Valuation & Risk)
+[ 5 ] STRATERA Infrastructure (Operable & Automated)
+[ 4 ] STRATERA Intelligence (Knowledge Graph & AI)
+[ 3 ] Infrastructure Data Layer (IoT & Documents)
+[ 2 ] Digital Twin Layer (Physical ↔ Digital)
+[ 1 ] Asset Identity Layer (Sovereign ID)
+
+The complete next-generation real estate operating layer of the global PropTech market. 🌐⚡`;
+
+            document.execCommand('copy');
+            // Fallback copy using clipboard API if available
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text);
+            }
+            alert('X Post draft successfully copied to clipboard!');
+            closeExportModal();
+        }
+
+        // Initial render on load
+        window.onload = function() {
+            renderStack();
+            updateInspector();
+        };
+    </script>
+</body>
+</html>
